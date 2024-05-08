@@ -9,9 +9,9 @@ import torch
 
 def main():
 
-    imageTrans = ToTensorImage(in_keys=["pixels"])
+    # imageTrans = ToTensorImage(in_keys=["pixels"])
     image = torch.randint(0, 255, (128, 128, 3), dtype=torch.uint8)
-    print(image)
+    # print(image)
     td = TensorDict({"pixels": image})
     # _ = imageTrans(td)
     # print(td)

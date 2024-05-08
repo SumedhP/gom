@@ -73,6 +73,15 @@ def make_env_and_dataset(
         env = gym.make("antmaze-medium-diverse-v2")
         env = AntMazeMultigoalWrapper(env, mode)
         dataset = AntMazePreferenceDataset(env)
+    elif suite == "antmazeVisual":
+        import d4rl
+        from .datasets import D4RLDataset
+        from .wrappers import AntMazeWrapper, VisualObservationWrapper, VIPFeatureExtractorWrapper
+        
+        env = gym.make(env_id)
+        env = AntMazeWrapper(env)
+        env = VisualObservationWrapper(env)
+        env = VIPFeatureExtractorWrapper(env)
     else:
         raise NotImplementedError
 
