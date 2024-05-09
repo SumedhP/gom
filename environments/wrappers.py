@@ -231,27 +231,6 @@ class AntMazeMultigoalWrapper(gym.Wrapper):
         done = self.env._elapsed_steps >= self.env._max_episode_steps
         return obs, reward, done, info
 
-# Wrapper for mode where we use visual inputs for observation instead of state
-# Expected render is to match the render at 128x128 resolution, RGB
-# class VisualObservationWrapper(gym.wrapper):
-#     def init(self, env):
-#         super().__init__(env)
-#         self.observation_space = gym.spaces.Box(low=0, high=255, shape=(128, 128, 3), dtype=np.uint8)
-    
-#     def step(self, action):
-#         obs, reward, done, info = self.env.step(action)
-#         obs = self.env.render(mode='rgb_array', width=128, height=128)
-#         return obs, reward, done, info
-    
-#     def reset(self, **kwargs):
-#         self.env.reset(**kwargs)
-#         obs = self.env.render(mode='rgb_array', width=128, height=128)
-#         return obs
-    
-    # def observation(self, obs):
-    #     return self.env.render(mode='rgb_array', width=128, height=128)
-
-
 # Visual wrapper should actually be a observation wrapper
 class VisualObservationWrapper(gym.ObservationWrapper):
     def __init__(self, env):
@@ -262,23 +241,6 @@ class VisualObservationWrapper(gym.ObservationWrapper):
         return self.env.render(mode='rgb_array', width=128, height=128)
     
 
-
-# class VIPFeatureExtractorWrapper(gym.wrapper):
-#     def init(self, env):
-#         super().__init__(env)
-#         from torchrl.envs.transforms import VIPTransform
-#         self.transformer = VIPTransform(model="resnet50", size=128)
-#         self.observation_space = gym.spaces.Box(low=-150, high=150, shape=(1024,), dtype=np.float32)
-
-#     def step(self, action):
-#         obs, reward, done, info = self.env.step(action)
-#         obs = self.transformer(obs)["vip_vec"]
-#         return obs, reward, done, info
-    
-#     def reset(self, **kwargs):
-#         obs = self.env.reset(**kwargs)
-#         obs = self.transformer(obs)["vip_vec"]
-#         return obs
 
 # VIPFeature extractor is also an observation wrapper
 class VIPFeatureExtractorWrapper(gym.ObservationWrapper):
