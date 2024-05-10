@@ -5,7 +5,7 @@ gym==0.23.1
 h5py==3.10.0
 hydra-core==1.3.2
 imageio==2.21.2
-jax==0.4.23
+#jax==0.4.23
 matplotlib==3.7.2
 
 #This has been modified to fix conflict
@@ -18,14 +18,25 @@ opencv_python==4.9.0.80
 optax==0.1.9
 orbax==0.1.9
 Pillow==10.1.0
+
 #torch==2.1.1+cpu torch needs: --index-url https://download.pytorch.org/whl/cpu
+# GPU version: pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url 
+#https://download.pytorch.org/whl/cu121
+
 tqdm==4.66.1
 
 # Need older version of scipy
 scipy==1.12.0
 
 # Downloads 0.4.27 by default
-jaxlib==0.4.21
+jaxlib==0.4.28
+
+
 
 # Need to install wandb
 # Need to seperately install mujoco
+cython==0.29.35
+patchelf
+
+jax[cuda12]==0.4.28
+torchrl

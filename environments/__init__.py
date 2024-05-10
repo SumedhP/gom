@@ -76,9 +76,9 @@ def make_env_and_dataset(
     elif suite == "kitchenVisual":
         import d4rl
         from .datasets import D4RLDataset
-        from .wrappers import AntMazeWrapper, VisualObservationWrapper, VIPFeatureExtractorWrapper
+        from .wrappers import KitchenWrapper, VisualObservationWrapper, VIPFeatureExtractorWrapper
 
-        env = gym.make(env_id)
+        env = gym.make("kitchen-" + str(task))
         env = KitchenWrapper(env)
         env = VisualObservationWrapper(env)
         env = VIPFeatureExtractorWrapper(env)
@@ -107,6 +107,12 @@ def make_env_and_dataset(
             raise NotImplementedError("Unsupported feature type")
         # Wrap environment in feature wrapper
         env = wrapper_cls(env)
+
+        print(" -----------------------------------------------------    The shape of the environment is " + str(env.observation_space))
+        print(wrapper_cls)
+        for i in range(10):
+            print("------")
+
         # Compute features for dataset
         dataset = FeatureDataset(dataset, env)
 

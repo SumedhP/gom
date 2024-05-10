@@ -247,7 +247,7 @@ class VIPFeatureExtractorWrapper(gym.ObservationWrapper):
     def __init__(self, env):
         super().__init__(env)
         from torchrl.envs.transforms import VIPTransform
-        self.transformer = VIPTransform(model="resnet50", size=128)
+        self.transformer = VIPTransform(model_name="resnet50", size=128)
         self.observation_space = gym.spaces.Box(low=-150, high=150, shape=(1024,), dtype=np.float32)
 
     def observation(self, obs):
