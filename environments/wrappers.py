@@ -241,7 +241,6 @@ class VisualObservationWrapper(gym.ObservationWrapper):
         return self.env.render(mode='rgb_array', width=128, height=128)
     
 
-
 # VIPFeature extractor is also an observation wrapper
 class VIPFeatureExtractorWrapper(gym.ObservationWrapper):
     def __init__(self, env):
