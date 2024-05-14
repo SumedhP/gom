@@ -241,16 +241,21 @@ class VisualObservationWrapper(gym.ObservationWrapper):
         return self.env.render(mode='rgb_array', width=128, height=128)
     
 
+from torchrl.envs.transforms import VIPTransform
+from tensordict import TensorDict
+
 # VIPFeature extractor is also an observation wrapper
 class VIPFeatureExtractorWrapper(gym.ObservationWrapper):
     def __init__(self, env):
         super().__init__(env)
-        from torchrl.envs.transforms import VIPTransform
         self.transformer = VIPTransform(model_name="resnet50", size=128)
         self.observation_space = gym.spaces.Box(low=-150, high=150, shape=(1024,), dtype=np.float32)
 
+    # Expect input to be 128x128x3 image
     def observation(self, obs):
-        return self.transformer(obs)["vip_vec"]
+        assert obs.shape == (128, 128, 3)
+        td = TensorDict({"pixels": obs})
+        return self.transformer(td)["vip_vec"]
     
 
 class KitchenWrapper(gym.ObservationWrapper):
