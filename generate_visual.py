@@ -24,12 +24,18 @@ class KitchenPartialVisualEnviroment(KitchenMicrowaveKettleLightSliderV0):
         else:
             super(KitchenTaskRelaxV1, self).render()
 
-def main():
-    import d4rl
-    import gym
-    from environments.wrappers import KitchenWrapper, VisualObservationWrapper, VIPFeatureExtractorWrapper
+import d4rl
+import gym
+from environments.wrappers import KitchenWrapper, VisualObservationWrapper,VIPFeatureExtractorWrapper
+import copy
+from torchrl.envs.transforms import VIPTransform
+from tqdm.rich import tqdm
+        
 
-    from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
+
+def main():
+
 
     print("-----------------------------------1")
     env = gym.make("kitchen-partial-v0")
@@ -80,8 +86,15 @@ def main():
     # transformedObs = transformedEnv.observation(renderEnv._get_obs())
     # print(transformedObs)
 
-
-
+    transformer = VIPTransform(model_name="resnet50", size=128)
+    newObs = copy.deepcopy(obs)
+    progress = tqdm(total=len(obs))
+    for i in range(len(obs)):
+        newObs[i] = transformer(obs[i])["vip_vec"]
+        progress.update(1)
+    progress.close()
+    for i in range(100):
+        print(newObs[i])
     
 
 if __name__ == "__main__":
