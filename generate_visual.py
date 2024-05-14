@@ -27,9 +27,12 @@ class KitchenPartialVisualEnviroment(KitchenMicrowaveKettleLightSliderV0):
 import d4rl
 import gym
 from environments.wrappers import KitchenWrapper, VisualObservationWrapper,VIPFeatureExtractorWrapper
-import copy
-from torchrl.envs.transforms import VIPTransform
+from torchrl.envs.transforms import VIPTransform, ToTensorImage
 from tqdm.rich import tqdm
+from tensordict import TensorDict
+import numpy as np
+import pickle as pkl
+import datetime
         
 
 from matplotlib import pyplot as plt
@@ -55,7 +58,7 @@ def main():
     first = renderEnv.render(mode='rgb_array', width=128, height=128)
     print(first.shape)
     plt.imshow(first)
-    plt.show()
+    # plt.show()
 
     print("-----------------------------------5")
 
@@ -66,7 +69,7 @@ def main():
     print(second.shape)
     print(second - first)
     plt.imshow(second)
-    plt.show()
+    # plt.show()
 
     print("-----------------------------------6")
 
@@ -76,26 +79,42 @@ def main():
         img = renderEnv.render(mode='rgb_array', width=128, height=128)
         plt.imshow(img)
         print(i)
-        plt.show()
+        # plt.show()
 
     print("-----------------------------------7")
 
-    # renderEnv.reset_model(state=obs[0])
-    # transformedEnv = VIPFeatureExtractorWrapper(renderEnv)
-    # print(transformedEnv.observation_space)
-    # transformedObs = transformedEnv.observation(renderEnv._get_obs())
-    # print(transformedObs)
+    # Goal here is convert images first to tensor dict, then to VIPTransform
 
     transformer = VIPTransform(model_name="resnet50", size=128)
-    newObs = copy.deepcopy(obs)
-    progress = tqdm(total=len(obs))
-    for i in range(len(obs)):
-        newObs[i] = transformer(obs[i])["vip_vec"]
+
+
+    num_to_do = 1000
+
+    progress = tqdm(total=num_to_do)
+    
+    new_obs = []
+
+    print("-----------------------------------8")
+
+    for i in range(num_to_do):
+        renderEnv.reset_model(state=obs[i])
+        curr_img = renderEnv.render(mode='rgb_array', width=128, height=128)
+        curr_img = curr_img.astype(dtype=np.uint8)
+        td = TensorDict({"pixels": curr_img})
+        transformer(td)
+        new_obs.append(td["vip_vec"])
         progress.update(1)
     progress.close()
-    for i in range(100):
-        print(newObs[i])
+
+    uuid = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
+    file_name = "vip_features_" + uuid + ".pkl"
+    with open(file_name, "wb") as f:
+        pkl.dump(new_obs, f)
+    print("Saved vip features to " + file_name)
     
+
+
+
 
 if __name__ == "__main__":
     main()
