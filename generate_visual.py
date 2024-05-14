@@ -87,8 +87,7 @@ def main():
 
     transformer = VIPTransform(model_name="resnet50", size=128)
 
-
-    num_to_do = 1000
+    num_to_do = len(obs)
 
     progress = tqdm(total=num_to_do)
     
@@ -104,6 +103,7 @@ def main():
         transformer(td)
         new_obs.append(td["vip_vec"])
         progress.update(1)
+
     progress.close()
 
     uuid = datetime.datetime.now().strftime("%Y-%m-%d_%H_%M_%S")
