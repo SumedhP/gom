@@ -45,7 +45,7 @@ def clip_by_global_norm(max_norm):
     def update_fn(updates, state, params=None):
         del params
         g_norm = optax.global_norm(updates)
-        updates = jax.tree_util.tree_map(lambda t: (t / g_norm) * max_norm, updates)
+        updates = jax.tree_util.tree.map(lambda t: (t / g_norm) * max_norm, updates)
         return updates, state
 
     return optax.GradientTransformation(init_fn, update_fn)

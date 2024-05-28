@@ -73,6 +73,16 @@ def make_env_and_dataset(
         env = gym.make("antmaze-medium-diverse-v2")
         env = AntMazeMultigoalWrapper(env, mode)
         dataset = AntMazePreferenceDataset(env)
+    elif suite == "kitchenVisual":
+        import d4rl
+        from .datasets import KitchenPartialVisualDataset
+        from .wrappers import KitchenWrapper, VisualObservationWrapper, VIPFeatureExtractorWrapper
+
+        env = gym.make("kitchen-" + str(task))
+        env = KitchenWrapper(env)
+        env = VisualObservationWrapper(env)
+        env = VIPFeatureExtractorWrapper(env)
+        dataset = KitchenPartialVisualDataset(env)
     else:
         raise NotImplementedError
 
@@ -97,6 +107,12 @@ def make_env_and_dataset(
             raise NotImplementedError("Unsupported feature type")
         # Wrap environment in feature wrapper
         env = wrapper_cls(env)
+
+        print(" -----------------------------------------------------    The shape of the environment is " + str(env.observation_space))
+        print(wrapper_cls)
+        for i in range(10):
+            print("------")
+
         # Compute features for dataset
         dataset = FeatureDataset(dataset, env)
 

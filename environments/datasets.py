@@ -67,6 +67,25 @@ class D4RLDataset(OfflineDataset):
 
         super().__init__(observations, actions, rewards, next_observations, dones)
 
+class KitchenPartialVisualDataset(OfflineDataset):
+    def __init__(self):
+        import d4rl
+        import pickle as pkl
+
+        dataset = d4rl.qlearning_dataset("kitchen-partial-v0")
+
+        # Somewhere here need to import the pkl file for both observations and next_observations
+        with open('vip_features_complete_observations.pkl', 'rb') as f:
+            observations = pkl.load(f)
+        with open('vip_features_complete_next_observations.pkl', 'rb') as f:
+            next_observations = pkl.load(f)
+
+        actions = dataset["actions"]
+        rewards = dataset["rewards"]
+        dones = dataset["terminals"]
+        
+        super().__init__(observations, actions, rewards, next_observations, dones)
+
 
 class RoboverseDataset(OfflineDataset):
     def __init__(self, env, task, data_dir="data/roboverse"):

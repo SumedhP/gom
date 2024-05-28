@@ -17,6 +17,8 @@ class FeatureDataset(Dataset):
         assert isinstance(env, FeatureWrapper)
         self.dataset = dataset
 
+        print(" ---- The shape of the environment in feature dataset is " + str(env.observation_space))
+
         # Compute features for dataset
         features = []
         next_features = []

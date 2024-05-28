@@ -211,7 +211,7 @@ class EMATrainState(TrainState):
         new_params = optax.apply_updates(self.params, updates)
 
         # Update EMA params
-        new_ema_params = jax.tree_map(
+        new_ema_params = jax.tree.map(
             lambda ema_p, p: ema_p * self.ema_rate + p * (1.0 - self.ema_rate),
             self.ema_params,
             new_params,
