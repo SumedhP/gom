@@ -75,14 +75,15 @@ class KitchenPartialVisualDataset(OfflineDataset):
         dataset = d4rl.qlearning_dataset("kitchen-partial-v0")
 
         # Somewhere here need to import the pkl file for both observations and next_observations
-        with open('Kitchen-Partial-VIP-features-Observations.pkl', 'rb') as f:
+        with open('vip_features_complete_observations.pkl', 'rb') as f:
             observations = pkl.load(f)
-        with open('Kitchen-Partial-VIP-features-Next-Observations.pkl', 'rb') as f:
+        with open('vip_features_complete_next_observations.pkl', 'rb') as f:
             next_observations = pkl.load(f)
 
         actions = dataset["actions"]
         rewards = dataset["rewards"]
         dones = dataset["terminals"]
+        
         super().__init__(observations, actions, rewards, next_observations, dones)
 
 
