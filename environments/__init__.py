@@ -73,6 +73,15 @@ def make_env_and_dataset(
         env = gym.make("antmaze-medium-diverse-v2")
         env = AntMazeMultigoalWrapper(env, mode)
         dataset = AntMazePreferenceDataset(env)
+    elif suite == "kitchenVisual":
+        import d4rl
+        from .datasets import KitchenPartialVisualDataset
+        from .wrappers import KitchenWrapper, KitchenVIPFeatureWrapper
+
+        env = gym.make("kitchen-" + str(task))
+        env = KitchenWrapper(env)
+        env = KitchenVIPFeatureWrapper(env)
+        dataset = KitchenPartialVisualDataset()
     else:
         raise NotImplementedError
 
