@@ -311,6 +311,8 @@ def train(config):
         config.env_id, config.seed, config.feat.type, config.feat.dim
     )
 
+    print("-------------- We have made the env and dataset -------------")
+
     # Build dataloader
     dataloader = DataLoader(
         dataset,
@@ -319,6 +321,9 @@ def train(config):
         num_workers=config.training.num_workers,
         drop_last=True,
     )
+
+    print("-------------- We have made the dataloader -------------")
+
 
     # Round steps to epochs
     num_epochs = config.training.num_steps // len(dataloader)
@@ -342,12 +347,16 @@ def train(config):
         rng,
     ) = build_models(config, env, dataset, rng)
 
+    print("-------------- We have built the models -------------")
+
     # Checkpointing utils
     checkpointer = checkpoint.PyTreeCheckpointer()
     options = checkpoint.CheckpointManagerOptions(max_to_keep=2, create=True)
     checkpoint_manager = checkpoint.CheckpointManager(
         os.path.abspath(config.logdir), checkpointer, options
     )
+
+    print("-------------- About to begin training -------------")
 
     # Train feature model and policy
     step = 0
