@@ -66,6 +66,30 @@ class D4RLDataset(OfflineDataset):
             next_observations = observations[:, :30]
 
         super().__init__(observations, actions, rewards, next_observations, dones)
+    
+class KitchenPartialVisualDataset(OfflineDataset):
+    def __init__(self):
+        import d4rl
+        import pickle as pkl
+        import gym
+        import numpy as np
+
+        env = gym.make("kitchen-partial-v0")
+        dataset = d4rl.qlearning_dataset(env)
+
+        with open('vip_features_complete_observations.pkl', 'rb') as f:
+            raw_observations = pkl.load(f)
+        with open('vip_features_complete_next_observations.pkl', 'rb') as f:
+            raw_next_observations = pkl.load(f)
+
+        obs = torch.tensor(np.array(raw_observations))
+        next_obs = torch.tensor(np.array(raw_next_observations))
+
+        actions = dataset["actions"]
+        rewards = dataset["rewards"]
+        dones = dataset["terminals"]
+
+        super().__init__(obs, actions, rewards, next_obs, dones)
 
 
 class RoboverseDataset(OfflineDataset):
