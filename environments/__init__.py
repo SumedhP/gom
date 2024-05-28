@@ -82,7 +82,7 @@ def make_env_and_dataset(
         env = KitchenWrapper(env)
         env = VisualObservationWrapper(env)
         env = VIPFeatureExtractorWrapper(env)
-        dataset = KitchenPartialVisualDataset(env)
+        dataset = KitchenPartialVisualDataset()
     else:
         raise NotImplementedError
 
