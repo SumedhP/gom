@@ -241,3 +241,17 @@ class KitchenWrapper(gym.ObservationWrapper):
 
     def observation(self, obs):
         return obs[:30]
+
+class KitchenVIPFeatureWrapper(gym.ObservationWrapper):
+    def __init__(self, env):
+        from torchrl.envs.transforms import VIPTransform
+        super().__init__(env)
+        self.transformer = VIPTransform(model_name="resnet50", size=128)
+        # Low and High found expirementally
+        self.observation_space = gym.spaces.Box(low=-150, high=150, shape=(1024,), dtype=np.float32)
+    
+    def observation(self, obs):
+        img = self.env.render(mode='rgb_array', width=128, height=128)
+        from tensordict import TensorDict
+        td = TensorDict({'pixels': img})
+        return self.transformer(td)["vip_vec"]
