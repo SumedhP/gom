@@ -107,12 +107,6 @@ def make_env_and_dataset(
             raise NotImplementedError("Unsupported feature type")
         # Wrap environment in feature wrapper
         env = wrapper_cls(env)
-
-        print(" -----------------------------------------------------    The shape of the environment is " + str(env.observation_space))
-        print(wrapper_cls)
-        for i in range(10):
-            print("------")
-
         # Compute features for dataset
         dataset = FeatureDataset(dataset, env)
 
